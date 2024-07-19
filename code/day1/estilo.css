@@ -1,0 +1,28 @@
+body {
+    background-color: lightgreen;
+}
+
+img {
+    border-radius: 50%;
+}
+
+#logo{
+    width: 100px;
+}
+
+#django{
+    width: 50px;
+}
+
+p {
+    padding: 5px;
+}
+
+p.principal {
+    border: 1px dashed black;
+}
+
+p.aviso {
+    border: 1px solid red;
+
+}
