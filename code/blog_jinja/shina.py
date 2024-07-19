@@ -1,11 +1,3 @@
-"""
-1. 0.0 abstração
-2. Mapa de roteamento de URLs
-3. Configurações de templates
-4. Objeto callable (WSGI)
-5. Metodo "run" execute a aplicação
-"""
-
 import re
 import json
 import cgi
@@ -32,28 +24,26 @@ class Shina:
         return template.render(**context).encode("utf-8")
 
     def __call__(self, environ, start_response):
-        body = b"Content not found"
-        status = "404 Not Found"
-        ctype = "text/html"
-        # Processar o request
         path = environ["PATH_INFO"]
         request_method = environ["REQUEST_METHOD"]
+        body = b"Content Not Found"
+        status = "404 Not Found"
+        ctype = "text/html"
 
-        # Resolve URLS
         for rule, method, view, template in self.url_map:
-            if match := re.match(rule, path):
+            match = re.match(rule, path)
+            if match:
                 if method != request_method:
                     continue
                 view_args = match.groupdict()
-
                 if method == "POST":
-                    view_args["forms"] = cgi.FieldStorage(
+                    view_args["form"] = cgi.FieldStorage(
                         fp=environ["wsgi.input"],
                         environ=environ,
                         keep_blank_values=1,
                     )
-
                 view_result = view(**view_args)
+
                 if isinstance(view_result, tuple):
                     view_result, status, ctype = view_result
                 else:
@@ -67,11 +57,9 @@ class Shina:
                 ):
                     body = json.dumps(view_result).encode("utf-8")
                 else:
-                    body = str(view_result.encode("utf-8"))
+                    body = str(view_result).encode("utf-8")
 
-        # Criar o Response
-        headers = [("Content-type", ctype)]
-        start_response(status, headers)
+        start_response(status, [("Content-type", ctype)])
         return [body]
 
     def run(self, host="0.0.0.0", port=8000):

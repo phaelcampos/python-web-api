@@ -81,7 +81,6 @@ def application(environ, start_response):
     start_response(status, headers)
     return [body]
 """
-
 from shina import Shina
 from database import conn
 
@@ -114,7 +113,6 @@ def new_post_add(form):
     post = {item.name: item.value for item in form.list}
     add_new_post(post)
     return "New post Created with Success!", "201 Created", "text/plain"
-
 
 # Controllers
 def get_posts_from_database(post_id=None):
