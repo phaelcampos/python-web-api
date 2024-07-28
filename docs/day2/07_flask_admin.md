@@ -72,7 +72,7 @@ def configure(app):
     app.admin = Admin(
         app,
         name=app.config.get("TITLE"),
-        template_mode=app.config.get("FLASK_ADMIN_TEMPLATE_MODE", "bootstrap3"),
+        template_mode=app.config.get("FLASK_ADMIN_TEMPLATE_MODE", "bootstrap2"),
     )
     app.admin.add_view(AdminPosts(mongo.db.posts, "Post"))
 ```
